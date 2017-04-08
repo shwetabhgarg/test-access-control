@@ -1,0 +1,11 @@
+<html>
+    <div align="left">
+        Hello {{ user.get_username }}
+    </div>
+    <div align="right">
+        <a href="/logout">Logout</a>
+    </div>
+    <hr>
+    {% block content %}
+    {% endblock %}
+</html>
