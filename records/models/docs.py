@@ -5,14 +5,14 @@ from django.db import models
 
 
 class Document(models.Model):
-    owner = models.IntegerField(null=False, blank=False, db_index=True)
     title = models.CharField(max_length=100)
-    parent_document = models.ForeignKey('Document', null=True, blank=True)
     data = models.CharField(max_length=100)
+    owner = models.IntegerField(null=False, blank=False, db_index=True)
+    parent_document = models.ForeignKey('Document', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
 
     def __unicode__(self):
-        return self.data
+        return self.title
 
 
 class AccessType(models.Model):
@@ -22,11 +22,20 @@ class AccessType(models.Model):
         return self.name
 
 
-class DocumentAccess(models.Model):
-    docid = models.ForeignKey(Document, null=False)
+class DocumentPermission(models.Model):
+    document = models.ForeignKey(Document, null=False)
     user = models.IntegerField(null=False)
     access_type = models.ForeignKey(AccessType, null=False)
 
     class Meta:
-        unique_together = ('docid', 'user',)
-        verbose_name_plural = 'DocumentAccesses'
+        unique_together = ('document', 'user',)
+
+
+class PendingApprovalRequest(models.Model):
+    document = models.ForeignKey(Document, null=False)
+    requester = models.IntegerField(null=False)
+    owner = models.IntegerField(null=False, db_index=True)
+    active = models.BooleanField(null=False, default=True)
+
+    class Meta:
+        unique_together = ('document', 'requester',)

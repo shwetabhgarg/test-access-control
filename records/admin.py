@@ -6,7 +6,8 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
 from records.models.users import Person
-from records.models.docs import Document, DocumentAccess, AccessType
+from records.models.docs import Document, DocumentPermission, AccessType,\
+     PendingApprovalRequest
 
 
 class PersonInline(admin.StackedInline):
@@ -21,4 +22,5 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(AccessType)
 admin.site.register(Document)
-admin.site.register(DocumentAccess)
+admin.site.register(DocumentPermission)
+admin.site.register(PendingApprovalRequest)

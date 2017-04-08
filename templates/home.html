@@ -3,6 +3,12 @@
 {% block content %}
 My Docs: </br>
 {% for link in links %}
-<a href="{% url 'document' shard=link.shard docid=link.docid %}">{{ link.title }} ( {{ link.date }} )</a></br>
+<a href="{% url 'document' shard=link.shard docid=link.docid %}">{{ link.title }} ({{ link.date }})</a></br>
 {% endfor %}
+<hr>
+{% if pending_reqs > 0 %}
+Total <a href="{% url 'requests' %}">{{ pending_reqs }}</a> Pending Requests </br>
+{% else %}
+Total 0 Pending Requests </br>
+{% endif %}
 {% endblock %}

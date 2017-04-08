@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+Total {{ pending_reqs|length }} Pending Requests </br>
+{% for req in pending_reqs %}
+{{ req.title }} ({{ req.date }})
+<form action="{% url 'document' shard=req.shard docid=req.docid %}" method="POST">{% csrf_token %}
+    <input type="hidden" name="requester" value="{{ req.requester }}">
+    <input type="radio" name="approval" value="1" checked> Approve
+    <input type="radio" name="approval" value="0"> Reject
+    <input type="submit" value="Submit">
+</form></br>
+{% endfor %}
+{% endblock %}
