@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+My Docs: </br>
+{% for link in links %}
+<a href="{% url 'document' shard=link.shard docid=link.docid %}">{{ link.title }} ( {{ link.date }} )</a></br>
+{% endfor %}
 {% endblock %}
