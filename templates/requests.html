@@ -3,7 +3,7 @@
 {% block content %}
 Total {{ pending_reqs|length }} Pending Requests </br>
 {% for req in pending_reqs %}
-{{ req.title }} ({{ req.date }})
+{{ req.title }} ({{ req.date }}) by user {{ req.requester }}
 <form action="{% url 'document' shard=shard docid=req.docid %}" method="POST">{% csrf_token %}
     <input type="hidden" name="requester" value="{{ req.requester }}">
     <input type="radio" name="approval" value="1" checked> Approve
