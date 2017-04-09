@@ -6,55 +6,6 @@ from records.models.docs import Document, DocumentPermission,\
     PendingApprovalRequest
 
 
-class HomeView(View):
-    def get(self, request):
-        # check if user maps to a person
-        try:
-            owner_id = request.user.person.id
-            shard = request.user.person.shard
-        except:
-            links = []
-            pending_reqs = 0
-        else:
-            # connect to db node # shard
-            docs = Document.objects.filter(owner=owner_id)
-            links = [{
-                'shard': format(shard, '06d'),
-                'docid': format(d.id, '014d'),
-                'title': d.title,
-                'date': d.created_at
-                } for d in docs]
-            pending_reqs = PendingApprovalRequest.objects
-            pending_reqs = pending_reqs.filter(owner=owner_id, active=True).count()
-
-        return render(request, 'home.html', {
-            'links': links, 'pending_reqs': pending_reqs
-            })
-
-
-class ApprovalRequestsView(View):
-    def get(self, request):
-        # check if user maps to a person
-        try:
-            owner_id = request.user.person.id
-        except:
-            pending_reqs = []
-        else:
-            # connect to db node # shard
-            requests = PendingApprovalRequest.objects.select_related('document')
-            requests = requests.filter(owner=owner_id, active=True)
-            requests = requests.values('requester', 'document_id',
-                                       'document__title', 'document__created_at')
-            pending_reqs = [{
-                'requester': r.get('requester'),
-                'docid': format(r.get('document_id'), '014d'),
-                'title': r.get('document__title'),
-                'date': r.get('document__created_at'),
-                'shard': format(request.user.person.shard, '06d')
-            } for r in requests]
-        return render(request, 'requests.html', {'pending_reqs': pending_reqs})
-
-
 class DocumentView(View):
     def get(self, request, shard, docid):
         try:
@@ -100,6 +51,7 @@ class DocumentView(View):
             return HttpResponse(status=400)
         try:
             approval = int(approval)
+            requester = int(requester)
         except:
             return HttpResponse(status=400)
 

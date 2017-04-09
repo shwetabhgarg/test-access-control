@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+Provide user id to share with
+<form action="{% url 'document' shard=shard docid=docid %}" method="post">{% csrf_token %}
+    <input type="hidden" name="approval" value="1">
+    <input type="text" name="requester">
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

@@ -3,7 +3,9 @@
 {% block content %}
 My Docs: </br>
 {% for link in links %}
-<a href="{% url 'document' shard=link.shard docid=link.docid %}">{{ link.title }} ({{ link.date }})</a></br>
+<a href="{% url 'document' shard=link.shard docid=link.docid %}">{{ link.title }} ({{ link.date }})</a>
+<a href="{% url 'share' shard=link.shard docid=link.docid %}">Sharing options</a>
+</br>
 {% endfor %}
 <hr>
 {% if pending_reqs > 0 %}
