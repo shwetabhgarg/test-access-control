@@ -12,8 +12,8 @@ class ApprovalRequestsView(View):
         except:
             pending_reqs = []
         else:
-            # connect to db node # shard
-            requests = PendingApprovalRequest.objects.select_related('document')
+            shard_db = 'shard' + str(request.user.person.shard)
+            requests = PendingApprovalRequest.objects.using(shard_db).select_related('document')
             requests = requests.filter(owner=owner_id, active=True)
             requests = requests.values('requester', 'document_id',
                                        'document__title', 'document__created_at')
@@ -39,9 +39,11 @@ class ShareView(View):
         shard = int(shard)
         docid = int(docid)
 
-        # connect to db node # shard
-        owner = Document.objects.get(id=docid).owner
-        if owner != user_id:
+        shard_db = 'shard' + str(shard)
+        doc = Document.objects.using(shard_db).get(id=docid)
+        if doc is None:
+            return HttpResponse(status=404)
+        if doc.owner != user_id:
             return HttpResponse(status=403)
 
         return render(request, 'share.html', {

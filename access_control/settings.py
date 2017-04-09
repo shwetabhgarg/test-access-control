@@ -78,7 +78,15 @@ WSGI_APPLICATION = 'access_control.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'master.sqlite3'),
+    },
+    'shard1': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'shard1.sqlite3'),
+    },
+    'shard2': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'shard2.sqlite3'),
     }
 }
 
